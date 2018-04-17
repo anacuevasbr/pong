@@ -38,6 +38,9 @@ var ballDirX = 1,
     ballDirY = 1,
     ballSpeed = 2;
 
+var playerscore = 0,
+    cpuscore = 0;
+
 // GAME FUNCTIONS
 
 function setup()
@@ -176,20 +179,23 @@ function ballmovement(){
   var Alturacpu = sphere.position.y >= cpuPaddle.position.y-15 && sphere.position.y <= cpuPaddle.position.y+15;
   var Anchocpu = sphere.position.x <= cpuPaddle.position.x+6 && sphere.position.x >= cpuPaddle.position.x+3
   if(Alturaplayer && Anchoplayer){
-    ballDirX = -1;
-    ballDirY = (2/3)*ballDirY;
+    ballDirX = -(ballDirX);
+
   } else if (Alturacpu && Anchocpu) {
-    ballDirX = 1;
-    ballDirY = 1;
+    ballDirX = -(ballDirX);
   }
 
   if(sphere.position.x >= 200){
-    alert('loser');
+    cpuscore += 1;
     sphere.position.x=0;
+    ballDirY = 1;
   } else if (sphere.position.x <= -200) {
-    alert('you win');
+    playerscore += 1;
     sphere.position.x=0;
+    ballDirY = 1;
   }
+
+  document.getElementById("scores").innerHTML = cpuscore + ' - ' + playerscore;
 
 
   sphere.position.y += ballSpeed * ballDirY;
@@ -201,6 +207,12 @@ function paddlemovement(){
     playerPaddle.position.y += -paddleSpeed;
   } else if(Key.isDown(Key.D)&& playerPaddle.position.y + 15<= 100){
     playerPaddle.position.y += paddleSpeed;
+  }
+
+  if (Key.isDown(Key.S) && cpuPaddle.position.y - 15 >= -100){
+    cpuPaddle.position.y += -paddleSpeed;
+  } else if(Key.isDown(Key.W)&& cpuPaddle.position.y + 15<= 100){
+    cpuPaddle.position.y += paddleSpeed;
   }
 
 }
