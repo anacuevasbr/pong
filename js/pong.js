@@ -180,10 +180,11 @@ function draw()
   cpumovement();
   ballmovement();
   checkwin();
-  //camera.position.x = playerPaddle.position.x + 100;
-  //camera.position.z = playerPaddle.position.z;
-  //camera.rotation.y = 90;
-  //camera.rotation.x = 60;
+  camera.position.x = playerPaddle.position.x + 100;
+  camera.position.z = playerPaddle.position.z + 20;
+  camera.rotation.y = 90;
+  camera.rotation.z = -60;
+  camera.rotation.x = 30;
   renderer.render(scene, camera);
 
   // Schedule the next frame
