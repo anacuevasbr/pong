@@ -30,7 +30,7 @@
 			}
 		</style>
 	</head>
-	<body onload='setup();'>
+	<body >
 		<div id='gameCanvas'></div>
 		<script src='js/three.min.js'></script>
 		<script src='js/keyboard.js'></script>
@@ -41,6 +41,20 @@
 			<h2 id='winnerBoard'>First to 3 wins!</h2>
 			<h3>A - move left
 			<br>D - move right</h3>
+		</div>
+
+		<form>
+			<select id="difficulty">
+				<option value=" "> </option>
+			  <option value="easy">easy</option>
+			  <option value="medium">medium</option>
+			  <option value="god">god</option>
+			</select>
+		</form>
+		<div>
+			<button onclick="setup();">
+	      start game
+	    </button>
 		</div>
 	</body>
 </html>

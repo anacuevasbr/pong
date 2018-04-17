@@ -39,16 +39,35 @@ var ballDirX = 1,
     ballSpeed = 2;
 
 var playerscore = 0,
-    cpuscore = 0;
+    cpuscore = 0,
+    maxScore = 10;
+
+var  difficulty = 0.05;
 
 // GAME FUNCTIONS
 
 function setup()
 {
+    //selectdifficulty();
     createScene();
     addMesh();
     addLight();
-    requestAnimationFrame(draw);
+    selectdifficulty();
+    //requestAnimationFrame(draw);
+
+}
+
+function selectdifficulty(){
+  x = document.getElementById("difficulty").value;
+  while(x==' '){};
+  if (x=="easy"){
+    difficulty = 0.02;
+  }else if (x=="medium") {
+    difficulty = 0.05;
+  }else if (x=="god") {
+    difficulty = 0.2;
+  }
+  requestAnimationFrame(draw);
 }
 
 function createScene(){
@@ -127,6 +146,7 @@ function addMesh(){
   playerPaddle.position.x = 180;
   cpuPaddle.position.x = -180;
 
+
   // add objects
   scene.add(sphere);
   scene.add( plane );
@@ -140,7 +160,7 @@ function addLight()
 {
     // Create a point light
     pointLight =
-      new THREE.PointLight(0xffff99);
+      new THREE.PointLight(0xffffff);
 
     // Set its position
     pointLight.position.x = 0;
@@ -157,8 +177,13 @@ function draw()
 {
   // Draw!
   paddlemovement();
+  cpumovement();
   ballmovement();
-
+  checkwin();
+  //camera.position.x = playerPaddle.position.x + 100;
+  //camera.position.z = playerPaddle.position.z;
+  //camera.rotation.y = 90;
+  //camera.rotation.x = 60;
   renderer.render(scene, camera);
 
   // Schedule the next frame
@@ -174,7 +199,7 @@ function ballmovement(){
 
   }
 
-  var Alturaplayer = sphere.position.y >= playerPaddle.position.y-15 && sphere.position.y <= playerPaddle.position.y+15;
+  var Alturaplayer = sphere.position.y >= playerPaddle.position.y-17 && sphere.position.y <= playerPaddle.position.y+17;
   var Anchoplayer = sphere.position.x >= playerPaddle.position.x-6 && sphere.position.x <= playerPaddle.position.x-3;
   var Alturacpu = sphere.position.y >= cpuPaddle.position.y-15 && sphere.position.y <= cpuPaddle.position.y+15;
   var Anchocpu = sphere.position.x <= cpuPaddle.position.x+6 && sphere.position.x >= cpuPaddle.position.x+3
@@ -189,8 +214,10 @@ function ballmovement(){
     cpuscore += 1;
     sphere.position.x=0;
     ballDirY = 1;
+    ballDirX = -ballDirX;
   } else if (sphere.position.x <= -200) {
     playerscore += 1;
+    ballDirX = -ballDirX;
     sphere.position.x=0;
     ballDirY = 1;
   }
@@ -208,11 +235,32 @@ function paddlemovement(){
   } else if(Key.isDown(Key.D)&& playerPaddle.position.y + 15<= 100){
     playerPaddle.position.y += paddleSpeed;
   }
-
+  /*
   if (Key.isDown(Key.S) && cpuPaddle.position.y - 15 >= -100){
     cpuPaddle.position.y += -paddleSpeed;
   } else if(Key.isDown(Key.W)&& cpuPaddle.position.y + 15<= 100){
     cpuPaddle.position.y += paddleSpeed;
   }
+  */
 
+}
+
+function cpumovement(){
+
+  cpuPaddleDirY = (sphere.position.y - cpuPaddle.position.y)*difficulty;
+  cpuPaddle.position.y += cpuPaddleDirY * paddleSpeed;
+
+}
+
+function checkwin(){
+
+  if (cpuscore==maxScore) {
+    document.getElementById("scores").innerHTML = 'Loser';
+    sphere.position.x = 0;
+    sphere.position.y = 0;
+  }else if (playerscore==maxScore) {
+    document.getElementById("scores").innerHTML = 'You win!';
+    sphere.position.x = 0;
+    sphere.position.y = 0;
+  }
 }
