@@ -255,17 +255,13 @@ function cpumovement(){
 }
 
 function cameramovement(){
-  var angle = 0;
+
   camera.position.x = playerPaddle.position.x + 100;
   camera.position.z = playerPaddle.position.z + 30;
   camera.position.y = playerPaddle.position.y;
-  if(playerPaddle.y != 0){
-    angle = Math.atan(400/playerPaddle.y);
-  }else {
-    angle = 1.32;
-  }
+
   camera.rotation.y = 3.141592/2;
-  camera.rotation.z = 3.141592/2 + angle;
+  camera.rotation.z = 3.141592/2;
   camera.rotation.x = 0;
 }
 
