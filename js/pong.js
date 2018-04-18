@@ -40,7 +40,7 @@ var ballDirX = 1,
 
 var playerscore = 0,
     cpuscore = 0,
-    maxScore = 10;
+    maxScore = 3;
 
 var  difficulty = 0.05;
 
@@ -139,7 +139,7 @@ function addMesh(){
 
 
   // Positions
-  sphere.position.z = -300;
+  sphere.position.z = -295;
   plane.position.z = -300;
   playerPaddle.position.z = -300;
   cpuPaddle.position.z = -300;
@@ -180,11 +180,12 @@ function draw()
   cpumovement();
   ballmovement();
   checkwin();
+  cameramovement();
   camera.position.x = playerPaddle.position.x + 100;
-  camera.position.z = playerPaddle.position.z + 20;
-  camera.rotation.y = 90;
-  camera.rotation.z = -60;
-  camera.rotation.x = 30;
+  camera.position.z = playerPaddle.position.z + 30;
+  camera.rotation.y = 3.141592/2;
+  camera.rotation.z = 3.141592/2;;
+  camera.rotation.x = 0;
   renderer.render(scene, camera);
 
   // Schedule the next frame
@@ -201,7 +202,7 @@ function ballmovement(){
   }
 
   var Alturaplayer = sphere.position.y >= playerPaddle.position.y-17 && sphere.position.y <= playerPaddle.position.y+17;
-  var Anchoplayer = sphere.position.x >= playerPaddle.position.x-6 && sphere.position.x <= playerPaddle.position.x-3;
+  var Anchoplayer = sphere.position.x >= playerPaddle.position.x-6 && sphere.position.x <= playerPaddle.position.x+5;
   var Alturacpu = sphere.position.y >= cpuPaddle.position.y-15 && sphere.position.y <= cpuPaddle.position.y+15;
   var Anchocpu = sphere.position.x <= cpuPaddle.position.x+6 && sphere.position.x >= cpuPaddle.position.x+3
   if(Alturaplayer && Anchoplayer){
@@ -251,6 +252,21 @@ function cpumovement(){
   cpuPaddleDirY = (sphere.position.y - cpuPaddle.position.y)*difficulty;
   cpuPaddle.position.y += cpuPaddleDirY * paddleSpeed;
 
+}
+
+function cameramovement(){
+  var angle = 0;
+  camera.position.x = playerPaddle.position.x + 100;
+  camera.position.z = playerPaddle.position.z + 30;
+  camera.position.y = playerPaddle.position.y;
+  if(playerPaddle.y != 0){
+    angle = Math.atan(400/playerPaddle.y);
+  }else {
+    angle = 1.32;
+  }
+  camera.rotation.y = 3.141592/2;
+  camera.rotation.z = 3.141592/2 + angle;
+  camera.rotation.x = 0;
 }
 
 function checkwin(){
