@@ -57,10 +57,14 @@ function setup()
 
 }
 
+function reestart(){
+  location.reload();
+}
+
 
 function selectdifficulty(){
   x = document.getElementById("difficulty").value;
-  while(x==' '){};
+
   if (x=="easy"){
     difficulty = 0.02;
   }else if (x=="medium") {
@@ -93,8 +97,8 @@ function createScene(){
     // Start the renderer
 
     renderer.setSize(WIDTH, HEIGHT);
-    renderer.shadowMapEnabled = true;
-    renderer.shadowMapType = THREE.PCFSoftShadowMap;
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
     // Attach the renderer-supplied DOM element.
     container.appendChild(renderer.domElement);
@@ -153,6 +157,11 @@ function addMesh(){
         {
           color: 0x1a1aff
         });
+
+  var texture = new THREE.TextureLoader().load( 'http://localhost:8000/publico.jpg' );
+
+  // immediately use the texture for material creation
+  var material5 = new THREE.MeshBasicMaterial( { map: texture, } );
   // Create a new mesh
   sphere = new THREE.Mesh(esfera, material1);
   plane = new THREE.Mesh( plano, material2 );
@@ -164,7 +173,7 @@ function addMesh(){
   /*columna4=new THREE.Mesh( columna, material4 );
   columna5=new THREE.Mesh( columna, material4 );
   columna6=new THREE.Mesh( columna, material4 );*/
-  grade = new THREE.Mesh( gradas, material1 );
+  grade = new THREE.Mesh( gradas, material5 );
 
 
   // important Positions
@@ -182,9 +191,9 @@ function addMesh(){
   columna1.position.z = -290;
   columna2.position.z = -290;
   columna3.position.z = -290;
-  columna1.position.y = -110;
-  columna2.position.y = -110;
-  columna3.position.y = -110;
+  columna1.position.y = -105;
+  columna2.position.y = -105;
+  columna3.position.y = -105;
   /*
   columna4.position.x = 0;
   columna5.position.x = 100;
@@ -229,7 +238,7 @@ function addLight()
 {
     // Create a point light
     pointLight1 =
-      new THREE.PointLight(0xffffff);
+      new THREE.PointLight(0xffffff, 0.5);
 
     // Set its position
     pointLight1.position.x = -100;
@@ -240,7 +249,7 @@ function addLight()
     scene.add(pointLight1);
 
     pointLight2 =
-      new THREE.PointLight(0xffffff);
+      new THREE.PointLight(0xffffff, 0.5);
 
     // Set its position
     pointLight2.position.x = 100;
@@ -261,6 +270,14 @@ function addLight()
 
     // Add to the scene
     scene.add(directionalLight);
+
+    spotLight =
+      new THREE.PointLight(0xffff00, 1.0);
+    spotLight.position.x = 0;
+    spotLight.position.y = 0;
+    spotLight.position.z = -220;
+    spotLight.angle = Math.PI/10000;
+    scene.add(spotLight);
 }
 
 
@@ -271,6 +288,7 @@ function draw()
   paddlemovement();
   cpumovement();
   ballmovement();
+  lightchanges();
   checkwin();
   cameramovement();
 
@@ -319,7 +337,11 @@ function ballmovement(){
   sphere.position.y += ballSpeed * ballDirY;
   sphere.position.x += ballSpeed * ballDirX;
 }
+function lightchanges(){
+  spotLight.position.x =sphere.position.x;
+  spotLight.position.y =sphere.position.y;
 
+}
 function paddlemovement(){
   if (Key.isDown(Key.A) && playerPaddle.position.y - 15 >= -100){
     playerPaddle.position.y += -paddleSpeed;

@@ -29,14 +29,31 @@
 				color: black;
 			}
 
-			#form{
-				ali
+			select {
+		    width: 6%;
+		    padding: 10px 14px;
+		    border: none;
+		    border-radius: 4px;
+		    background-color: #f1f1f1;
+				margin-left: 47%;
+
+			}
+
+			button{
+				width: 6%;
+		    padding: 10px 14px;
+		    border-style: solid;
+				border-color: black;
+		    border-radius: 4px;
+		    background-color: #f1f1f1;
+				margin-left: 47%;
+
 			}
 		</style>
 	</head>
 	<body >
 		<div id='gameCanvas'></div>
-		<script src='js/three.min.js'></script>
+		<script src='js/three.js'></script>
 		<script src='js/keyboard.js'></script>
 		<script src='js/pong.js'></script>
 		<div id='scoreboard'>
@@ -49,16 +66,18 @@
 
 		<form>
 			<select id="difficulty">
-				<option value=" "> </option>
-			  <option value="easy">easy</option>
 			  <option value="medium">medium</option>
+			  <option value="easy">dummy</option>
 			  <option value="god">god</option>
 			</select>
 		</form>
 		<div>
 			<button onclick="setup();">
 	      start game
-	    </button>
+	    </button><br>
+			<button onclick="reestart();">
+			reload game
+			</button>
 		</div>
 	</body>
 </html>
