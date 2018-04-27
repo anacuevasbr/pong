@@ -43,6 +43,7 @@ var playerscore = 0,
     maxScore = 3;
 
 var  difficulty = 0.05;
+var mode;
 
 // GAME FUNCTIONS
 
@@ -52,6 +53,7 @@ function setup()
     createScene();
     addMesh();
     addLight();
+    players();
     selectdifficulty();
     //requestAnimationFrame(draw);
 
@@ -73,6 +75,10 @@ function selectdifficulty(){
     difficulty = 0.2;
   }
   requestAnimationFrame(draw);
+}
+
+function players(){
+  mode = document.getElementById("players").value;
 }
 
 function createScene(){
@@ -158,10 +164,10 @@ function addMesh(){
           color: 0x1a1aff
         });
 
-  var texture = new THREE.TextureLoader().load( 'http://localhost:8000/publico.jpg' );
+  //var texture = new THREE.TextureLoader().load( 'http://localhost:8000/publico.jpg' );
 
   // immediately use the texture for material creation
-  var material5 = new THREE.MeshBasicMaterial( { map: texture, } );
+  //var material5 = new THREE.MeshBasicMaterial( { map: texture, } );
   // Create a new mesh
   sphere = new THREE.Mesh(esfera, material1);
   plane = new THREE.Mesh( plano, material2 );
@@ -170,10 +176,8 @@ function addMesh(){
   columna1=new THREE.Mesh( columna, material4 );
   columna2=new THREE.Mesh( columna, material4 );
   columna3=new THREE.Mesh( columna, material4 );
-  /*columna4=new THREE.Mesh( columna, material4 );
-  columna5=new THREE.Mesh( columna, material4 );
-  columna6=new THREE.Mesh( columna, material4 );*/
-  grade = new THREE.Mesh( gradas, material5 );
+
+  grade = new THREE.Mesh( gradas, material3 );
 
 
   // important Positions
@@ -194,16 +198,7 @@ function addMesh(){
   columna1.position.y = -105;
   columna2.position.y = -105;
   columna3.position.y = -105;
-  /*
-  columna4.position.x = 0;
-  columna5.position.x = 100;
-  columna6.position.x = -100;
-  columna4.position.z = -290;
-  columna5.position.z = -290;
-  columna6.position.z = -290;
-  columna4.position.y = 110;
-  columna5.position.y = 110;
-  columna6.position.y = 110;*/
+
   grade.position.z = -275;
   grade.position.y = 125;
   grade.rotation.x = Math.PI/6;
@@ -225,10 +220,7 @@ function addMesh(){
   scene.add( columna1 );
   scene.add( columna2 );
   scene.add( columna3 );
-  /*
-  scene.add( columna4 );
-  scene.add( columna5 );
-  scene.add( columna6 );*/
+
   scene.add( grade );
 
 
@@ -286,7 +278,11 @@ function draw()
 {
   // Draw!
   paddlemovement();
-  cpumovement();
+  if (mode=="single"){
+    cpumovement();
+  }else{
+    secondplayer();
+  }
   ballmovement();
   lightchanges();
   checkwin();
@@ -348,13 +344,15 @@ function paddlemovement(){
   } else if(Key.isDown(Key.D)&& playerPaddle.position.y + 15<= 100){
     playerPaddle.position.y += paddleSpeed;
   }
-  /*
-  if (Key.isDown(Key.S) && cpuPaddle.position.y - 15 >= -100){
+}
+
+function secondplayer(){
+  if (Key.isDown(Key.J) && cpuPaddle.position.y - 15 >= -100){
     cpuPaddle.position.y += -paddleSpeed;
-  } else if(Key.isDown(Key.W)&& cpuPaddle.position.y + 15<= 100){
+  } else if(Key.isDown(Key.L)&& cpuPaddle.position.y + 15<= 100){
     cpuPaddle.position.y += paddleSpeed;
   }
-  */
+
 
 }
 
