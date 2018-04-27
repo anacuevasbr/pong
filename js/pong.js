@@ -45,6 +45,11 @@ var playerscore = 0,
 var  difficulty = 0.05;
 var mode;
 
+var pointLight1,
+    pointLight2,
+    directionalLight,
+    spotLight;
+
 // GAME FUNCTIONS
 
 function setup()
@@ -103,6 +108,7 @@ function createScene(){
     // Start the renderer
 
     renderer.setSize(WIDTH, HEIGHT);
+    renderer.setClearColor(0x80ffff);
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
@@ -135,7 +141,7 @@ function addMesh(){
   var columna = new THREE.CubeGeometry(
       10,
       10,
-      60,
+      100,
       1);
 
   var gradas = new THREE.PlaneGeometry(
@@ -143,6 +149,7 @@ function addMesh(){
     PLANE_WIDTH,
     60,
     PLANE_QUALITY);
+
 
   //materiales
   var material1 = new THREE.MeshLambertMaterial(
@@ -161,13 +168,13 @@ function addMesh(){
         });
   var material4 = new THREE.MeshLambertMaterial(
         {
-          color: 0x1a1aff
+          color: 0xff0000
         });
 
-  //var texture = new THREE.TextureLoader().load( 'http://localhost:8000/publico.jpg' );
+  var texture = new THREE.TextureLoader().load( 'http://localhost:8000/publico.jpg' );
 
   // immediately use the texture for material creation
-  //var material5 = new THREE.MeshBasicMaterial( { map: texture, } );
+  var material5 = new THREE.MeshBasicMaterial( { map: texture, } );
   // Create a new mesh
   sphere = new THREE.Mesh(esfera, material1);
   plane = new THREE.Mesh( plano, material2 );
@@ -177,12 +184,14 @@ function addMesh(){
   columna2=new THREE.Mesh( columna, material4 );
   columna3=new THREE.Mesh( columna, material4 );
 
-  grade = new THREE.Mesh( gradas, material3 );
+
+  grade = new THREE.Mesh( gradas, material5 );
 
 
   // important Positions
   sphere.position.z = -295;
   plane.position.z = -300;
+
   playerPaddle.position.z = -300;
   cpuPaddle.position.z = -300;
   playerPaddle.position.x = 180;
@@ -195,9 +204,9 @@ function addMesh(){
   columna1.position.z = -290;
   columna2.position.z = -290;
   columna3.position.z = -290;
-  columna1.position.y = -105;
-  columna2.position.y = -105;
-  columna3.position.y = -105;
+  columna1.position.y = -100;
+  columna2.position.y = -100;
+  columna3.position.y = -100;
 
   grade.position.z = -275;
   grade.position.y = 125;
@@ -211,7 +220,11 @@ function addMesh(){
   columna1.castShadow = true;
   columna2.castShadow = true;
   columna3.castShadow = true;
-  plane.receiveShadow = true;
+  columna1.receiveShadow = true;
+  columna2.receiveShadow = true;
+  columna3.receiveShadow = true;
+
+
   // add objects
   scene.add(sphere);
   scene.add( plane );
@@ -222,6 +235,7 @@ function addMesh(){
   scene.add( columna3 );
 
   scene.add( grade );
+
 
 
 }
@@ -255,9 +269,9 @@ function addLight()
       new THREE.DirectionalLight( 0xffffff, 1.0 );
 
     // Set its position
-    directionalLight.position.x = 0;
-    directionalLight.position.y = -400;
-    directionalLight.position.z = -290;
+    directionalLight.position.x = 0-150;
+    directionalLight.position.y = -150;
+    directionalLight.position.z = 400;
     directionalLight.castShadow = true;
 
     // Add to the scene
@@ -269,6 +283,7 @@ function addLight()
     spotLight.position.y = 0;
     spotLight.position.z = -220;
     spotLight.angle = Math.PI/10000;
+    spotLight.castShadow = true;
     scene.add(spotLight);
 }
 
@@ -339,17 +354,26 @@ function lightchanges(){
 
 }
 function paddlemovement(){
-  if (Key.isDown(Key.A) && playerPaddle.position.y - 15 >= -100){
+  var Up;
+  var Down;
+  if (mode=="single"){
+    Up = Key.D;
+    Down = Key.A;
+  }else{
+    Up = Key.W;
+    Down = Key.S;
+  }
+  if (Key.isDown(Down) && playerPaddle.position.y - 15 >= -100){
     playerPaddle.position.y += -paddleSpeed;
-  } else if(Key.isDown(Key.D)&& playerPaddle.position.y + 15<= 100){
+  } else if(Key.isDown(Up)&& playerPaddle.position.y + 15<= 100){
     playerPaddle.position.y += paddleSpeed;
   }
 }
 
 function secondplayer(){
-  if (Key.isDown(Key.J) && cpuPaddle.position.y - 15 >= -100){
+  if (Key.isDown(Key.L) && cpuPaddle.position.y - 15 >= -100){
     cpuPaddle.position.y += -paddleSpeed;
-  } else if(Key.isDown(Key.L)&& cpuPaddle.position.y + 15<= 100){
+  } else if(Key.isDown(Key.O)&& cpuPaddle.position.y + 15<= 100){
     cpuPaddle.position.y += paddleSpeed;
   }
 
@@ -365,14 +389,16 @@ function cpumovement(){
 
 function cameramovement(){
 
-  camera.position.x = playerPaddle.position.x + 150;
-  camera.position.z = playerPaddle.position.z + 50;
-  camera.position.y = playerPaddle.position.y;
+  if (mode=="single"){
+    camera.position.x = playerPaddle.position.x + 125;
+    camera.position.z = playerPaddle.position.z + 50;
+    camera.position.y = playerPaddle.position.y;
 
 
-  camera.rotation.y = Math.PI/2;
-  camera.rotation.z = Math.PI/2;
-  camera.rotation.x = 0;
+    camera.rotation.y = Math.PI/2;
+    camera.rotation.z = Math.PI/2;
+    camera.rotation.x = 0;
+  }
 }
 
 function checkwin(){
