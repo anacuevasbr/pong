@@ -1,3 +1,11 @@
+/*Se han implementado los siguientes extras:
+  1.Elementos extractAllPoints
+  2.shadow
+  3.Seguir a la pelota con la iluminacion
+  4.Texturas
+  Ademas se ha añadido un modo de dos jugadores
+  y eleccion de dificultad de la cpu*/
+
 // GLOBAL VARIABLES
 
 var container;
@@ -160,7 +168,7 @@ function addMesh(){
   var material2 = new THREE.MeshLambertMaterial(
         {
           //color: 0x009999
-          color: 0xffa366
+          color: 0x0bda0b
         });
   var material3 = new THREE.MeshLambertMaterial(
         {
@@ -171,10 +179,9 @@ function addMesh(){
           color: 0xff0000
         });
 
-  var texture = new THREE.TextureLoader().load( 'http://localhost:8000/publico.jpg' );
+  var texture1 = new THREE.TextureLoader().load( 'http://localhost:8000/textures/publico.jpg' );
+  var material5 = new THREE.MeshBasicMaterial( { map: texture1, } );
 
-  // immediately use the texture for material creation
-  var material5 = new THREE.MeshBasicMaterial( { map: texture, } );
   // Create a new mesh
   sphere = new THREE.Mesh(esfera, material1);
   plane = new THREE.Mesh( plano, material2 );
@@ -216,6 +223,7 @@ function addMesh(){
   //Shadows
   sphere.castShadow = true; //default is false
   playerPaddle.castShadow = true;
+  cpuPaddle.castShadow = true;
   plane.receiveShadow = true;
   columna1.castShadow = true;
   columna2.castShadow = true;
@@ -360,8 +368,8 @@ function paddlemovement(){
     Up = Key.D;
     Down = Key.A;
   }else{
-    Up = Key.W;
-    Down = Key.S;
+    Up = Key.O;
+    Down = Key.L;
   }
   if (Key.isDown(Down) && playerPaddle.position.y - 15 >= -100){
     playerPaddle.position.y += -paddleSpeed;
@@ -371,9 +379,9 @@ function paddlemovement(){
 }
 
 function secondplayer(){
-  if (Key.isDown(Key.L) && cpuPaddle.position.y - 15 >= -100){
+  if (Key.isDown(Key.S) && cpuPaddle.position.y - 15 >= -100){
     cpuPaddle.position.y += -paddleSpeed;
-  } else if(Key.isDown(Key.O)&& cpuPaddle.position.y + 15<= 100){
+  } else if(Key.isDown(Key.W)&& cpuPaddle.position.y + 15<= 100){
     cpuPaddle.position.y += paddleSpeed;
   }
 
